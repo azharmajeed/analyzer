@@ -6,13 +6,14 @@ authors = ["azharmajeed <azharmajeed1997@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-langchain = "^0.0.188"
 openai = "^0.27.7"
 psycopg2 = "^2.9.6"
 python-environ = "^0.4.54"
 pandas = "^2.0.3"
 streamlit = "^1.25.0"
 python-dotenv = "^1.0.0"
+langchain = "^0.0.240"
+duckduckgo-search = "^3.8.4"
 
 [tool.poetry.dev-dependencies]
 
