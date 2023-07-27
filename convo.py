@@ -6,6 +6,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.agents import initialize_agent
 import os
+import pinecone
 from dotenv import load_dotenv
 
 load_dotenv()
