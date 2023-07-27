@@ -810,6 +810,21 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "pypdf"
+version = "3.13.0"
+description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+crypto = ["pycryptodome"]
+dev = ["black", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "flit", "wheel"]
+docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
+full = ["pycryptodome", "pillow"]
+image = ["pillow"]
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -1196,7 +1211,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-ena
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "7632b52d4a9ecaf2480fc6fda4e3269bde800a29c1797640bde5a9da80740274"
+content-hash = "fed4a1be80aa8ceb981f4f74dca38e439e5f3c4a342fa40824767a1204aa68e3"
 
 [metadata.files]
 aiofiles = []
@@ -1262,6 +1277,7 @@ pydantic = []
 pydeck = []
 pygments = []
 pympler = []
+pypdf = []
 python-dateutil = []
 python-dotenv = []
 python-environ = []
