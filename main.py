@@ -11,6 +11,12 @@ st.title("🦜🔗 Quickstart App")
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 uploaded_file = st.file_uploader("Choose a file")
 
+# memory of previous converstion
+# embeddings from uploaded documents
+# ability to query a database
+# ability to search the web
+# custom prompt from the collation of the above results
+
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"

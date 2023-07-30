@@ -27,33 +27,3 @@ if prompt := st.chat_input():
         st_callback = StreamlitCallbackHandler(st.container())
         response = agent.run(prompt, callbacks=[st_callback])
         st.write(response)
-
-
-# llm = OpenAI(temperature=0, openai_api_key=os.environ.get("OPENAI_API_KEY"))
-# search = SerpAPIWrapper()
-# llm_math_chain = LLMMathChain(llm=llm, verbose=True)
-# db = SQLDatabase.from_uri("sqlite:///../../../../../notebooks/Chinook.db")
-# db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True)
-# tools = [
-#     Tool(
-#         name="Search",
-#         func=search.run,
-#         description="useful for when you need to answer questions about current events. You should ask targeted questions",
-#     ),
-#     Tool(
-#         name="Calculator",
-#         func=llm_math_chain.run,
-#         description="useful for when you need to answer questions about math",
-#     ),
-#     Tool(
-#         name="FooBar DB",
-#         func=db_chain.run,
-#         description="useful for when you need to answer questions about FooBar. Input should be in the form of a question containing full context",
-#     ),
-# ]
-
-# mrkl = initialize_agent(
-#     tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
-# )
-
-# mrkl.run("?")

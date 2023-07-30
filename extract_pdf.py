@@ -20,9 +20,7 @@ def visitor_body(text, cm, tm, font_dict, font_size):
         )
 
 
-for page in reader.pages[13:]:
-    # print(page)
-
+for page in reader.pages[14:]:
     parts_meta = []
     parts = []
 
@@ -30,5 +28,10 @@ for page in reader.pages[13:]:
     text_body = "".join(parts)
 
     for num, line in enumerate(text_body.splitlines()):
+        # check if line starts with number and [
+        # check if line contains ".—
+        # check for chapter break
+        # check for Illustrations
+        # exclude references.
         print(num, line)
     break
