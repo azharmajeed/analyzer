@@ -91,7 +91,7 @@ class Conversation:
                 metric="cosine",
                 dimension=1536,  # 1536 dim of text-embedding-ada-002
             )
-        if index_name not in pinecone.list_indexes():
+        if memory_index_name not in pinecone.list_indexes():
             pinecone.create_index(
                 name=memory_index_name,
                 metric="cosine",
@@ -105,8 +105,8 @@ class Conversation:
         query = "How many sections are there in the Indian Penal Code?"
         docs = docsearch.similarity_search(query)
 
-        index = pinecone.Index("chat-memory-index")
-        vectorstore = Pinecone(index, embeddings.embed_query, "text")
+        memory_index = pinecone.Index("chat-memory-index")
+        vectorstore = Pinecone(memory_index, embeddings.embed_query, "text")
         retriever = vectorstore.as_retriever()
         chat_memory = VectorStoreRetrieverMemory(retriver=retriever)
         # docsearch = Chroma.from_documents(
