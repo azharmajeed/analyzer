@@ -283,6 +283,18 @@ trio = ["trio (>=0.14,<0.23)"]
 wmi = ["wmi (>=1.5.1,<2.0.0)"]
 
 [[package]]
+name = "docx"
+version = "0.2.4"
+description = "The docx module creates, reads and writes Microsoft Office Word 2007 docx files"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+lxml = "*"
+Pillow = ">=2.0"
+
+[[package]]
 name = "duckduckgo-search"
 version = "3.8.4"
 description = "Search for words, documents, images, news, maps and text translation using the DuckDuckGo.com search engine."
@@ -1024,6 +1036,21 @@ full = ["pycryptodome", "pillow"]
 image = ["pillow"]
 
 [[package]]
+name = "pypdf2"
+version = "3.0.1"
+description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+crypto = ["pycryptodome"]
+dev = ["black", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "flit", "wheel"]
+docs = ["sphinx", "sphinx-rtd-theme", "myst-parser"]
+full = ["pycryptodome", "pillow"]
+image = ["pillow"]
+
+[[package]]
 name = "pypika"
 version = "0.48.9"
 description = "A SQL query builder API for Python"
@@ -1288,6 +1315,17 @@ python-versions = ">=3.8"
 mpmath = ">=0.19"
 
 [[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "tenacity"
 version = "8.2.2"
 description = "Retry code until it succeeds"
@@ -1426,7 +1464,7 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "uvicorn"
-version = "0.23.1"
+version = "0.23.2"
 description = "The lightning-fast ASGI server."
 category = "main"
 optional = false
@@ -1542,7 +1580,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-ena
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "38c5ee5266d4b190b8b78551c473acffe9c45fceebcc749ed7ef4c37555f4b57"
+content-hash = "1741955e039cff887e59f7b3ae0292bd525b9e0e4cf85c14702c8d125d384398"
 
 [metadata.files]
 aiofiles = []
@@ -1568,6 +1606,7 @@ coloredlogs = []
 dataclasses-json = []
 decorator = []
 dnspython = []
+docx = []
 duckduckgo-search = []
 exceptiongroup = []
 fastapi = []
@@ -1624,6 +1663,7 @@ pydeck = []
 pygments = []
 pympler = []
 pypdf = []
+pypdf2 = []
 pypika = []
 pyreadline3 = []
 python-dateutil = []
@@ -1645,6 +1685,7 @@ sqlalchemy = []
 starlette = []
 streamlit = []
 sympy = []
+tabulate = []
 tenacity = []
 tiktoken = []
 tokenizers = []

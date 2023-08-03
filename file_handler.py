@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from PyPDF2 import PdfReader
-from docx import Document
+
+# from docx import Document
 
 
 """
@@ -32,6 +33,7 @@ class FileHandler(ABC):
         """
         pass
 
+
 class PDFHandler(FileHandler):
     """File handler for PDF files."""
 
@@ -44,7 +46,7 @@ class PDFHandler(FileHandler):
 
         Returns:
         str: The extracted text.
-        
+
         """
         try:
             pdf_reader = PdfReader(file)
@@ -59,26 +61,26 @@ class PDFHandler(FileHandler):
             return ""  # return an empty string if an error occurs
 
 
+# class DocxHandler(FileHandler):
+#     """File handler for Word (.docx) files."""
 
-class DocxHandler(FileHandler):
-    """File handler for Word (.docx) files."""
+#     def read_file(self, file):
+#         """Read a Word file and extract the text.
 
-    def read_file(self, file):
-        """Read a Word file and extract the text.
+#         Parameters:
+#         file (UploadedFile): The Word file to read.
 
-        Parameters:
-        file (UploadedFile): The Word file to read.
+#         Returns:
+#         str: The extracted text.
 
-        Returns:
-        str: The extracted text.
+#         """
+#         try:
+#             doc = Document(file)
+#             return " ".join([paragraph.text for paragraph in doc.paragraphs])
+#         except Exception as e:
+#             print(f"Error reading Word file: {e}")
+#             return ""
 
-        """
-        try:
-            doc = Document(file)
-            return " ".join([paragraph.text for paragraph in doc.paragraphs])
-        except Exception as e:
-            print(f"Error reading Word file: {e}")
-            return ""
 
 class TxtHandler(FileHandler):
     """File handler for text (.txt) files."""
@@ -94,10 +96,11 @@ class TxtHandler(FileHandler):
 
         """
         try:
-            return file.read().decode('utf-8')
+            return file.read().decode("utf-8")
         except Exception as e:
             print(f"Error reading text file: {e}")
             return ""
+
 
 class CSVFileHandler(FileHandler):
     def read_file(self, file):
@@ -111,7 +114,7 @@ class CSVFileHandler(FileHandler):
             str: Contents of the CSV file.
         """
         try:
-            csv_data = file.read().decode('utf-8')
+            csv_data = file.read().decode("utf-8")
             return csv_data
         except UnicodeDecodeError:
             # Handle decoding error
@@ -137,8 +140,11 @@ class FileHandlerFactory:
         """
         if file_type == "application/pdf":
             return PDFHandler()
-        elif file_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            return DocxHandler()
+        # elif (
+        #     file_type
+        #     == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        # ):
+        #     return DocxHandler()
         elif file_type == "text/plain":
             return TxtHandler()
         elif file_type == "text/csv":
