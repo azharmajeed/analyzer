@@ -8,6 +8,7 @@ from io import StringIO
 
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import create_pandas_dataframe_agent
+from langchain.callbacks import StreamlitCallbackHandler
 from langchain.tools.python.tool import PythonREPLTool
 from langchain.python import PythonREPL
 from langchain.agents.agent_types import AgentType
@@ -16,13 +17,16 @@ from file_handler import PDFHandler
 
 load_dotenv()
 
+PROMPT = "You are Python Pandas coding agent, whose job is to convert natural text to pandas "
+
 
 def update_counter(desc, files):
     st.session_state.count += 1
     st.session_state.last_updated = datetime.now().time()
     st.session_state.files_uploaded = files
     if len(files) > 0 and (
-        (desc not in st.session_state.desc_file_dict) and (files[-1] not in files)
+        (desc not in st.session_state.desc_file_dict)
+        and (files[-1] not in st.session_state.desc_file_dict.values())
     ):
         st.session_state.desc_file_dict[desc] = files[-1]
         if files[-1].type == "text/csv":
@@ -32,11 +36,8 @@ def update_counter(desc, files):
         st.session_state.desc_list.append(desc)
 
 
-PROMPT = "You are Python Pandas coding agent, whose job is to convert natural text to pandas "
-
-
 # Generate LLM response
-def generate_response(api_key, dfs, input_query):
+def generate_response(api_key, dfs, input_query, callbacks):
     llm = ChatOpenAI(
         model_name="gpt-3.5-turbo", temperature=0.2, openai_api_key=api_key
     )
@@ -44,13 +45,17 @@ def generate_response(api_key, dfs, input_query):
     agent = create_pandas_dataframe_agent(
         llm,
         dfs,
+        # prefix="Remove any ` from the Action Input",
         verbose=True,
         include_df_in_prompt=False,
-        agent_type=AgentType.OPENAI_FUNCTIONS,
+        streaming=True,
+        callbacks=callbacks,
+        agent=AgentType.OPENAI_FUNCTIONS,
+        return_intermediate_steps=True,
         agent_executor_kwargs={"handle_parsing_errors": True},
     )
     # Perform Query using the Agent
-    response = agent.run(input_query)
+    response = agent({"input": input_query})
     return response
 
 
@@ -93,27 +98,58 @@ if "openai_model" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat messages from history on app rerun
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
 
-prompt = st.chat_input("Ask a question about the data:")
-if prompt:
+
+if prompt := st.chat_input():
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
+
+    st.chat_message("user").write(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
-    # Display user message in chat message container
-    with st.chat_message("user"):
-        st.markdown(prompt)
-    # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        full_response = ""
+        st_callback = StreamlitCallbackHandler(st.container())
         response = generate_response(
             openai_api_key,
             [i[1] for i in st.session_state.csv_files],
             prompt,
+            callbacks=[st_callback],
         )
-        st.markdown(response)
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": response["output"],
+                "content_middle_step": response["intermediate_steps"],
+            }
+        )
+        with st.expander("intermediate steps"):
+            st.write(response["intermediate_steps"])
+        st.write(response["output"])
+
+
+# Display chat messages from history on app rerun
+# for message in st.session_state.messages:
+#     with st.chat_message(message["role"]):
+#         st.markdown(message["content"])
+
+# prompt = st.chat_input("Ask a question about the data:")
+# if prompt:
+#     st.session_state.messages.append({"role": "user", "content": prompt})
+#     # Display user message in chat message container
+#     with st.chat_message("user"):
+#         st.markdown(prompt)
+#     # Display assistant response in chat message container
+#     with st.chat_message("assistant"):
+#         message_placeholder = st.empty()
+#         full_response = ""
+#         response = generate_response(
+#             openai_api_key,
+#             [i[1] for i in st.session_state.csv_files],
+#             prompt,
+#         )
+#         st.markdown(response)
 
 
 # st.write("Last Updated = ", st.session_state.last_updated)
