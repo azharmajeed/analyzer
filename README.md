@@ -1,6 +1,6 @@
 # 🦜️🔗 Data Analyzer LLM
 
-This repository contains reference implementations of various LangChain agents interacted with using Streamlit.
+This repository contains a Streamlit chat interface to interact with LLM based agents using LangChain and Vector databases like Pinecone and ChromaDB.
 The main goal of the project is to build a tool that can connect to various data sources(csv/text/api) and generate the query/code needed to fetch the necessary information pertaining to the user's prompt.
 
 Currently using OpenAI's API and embeddings, will eventually support using Llama models locally.
