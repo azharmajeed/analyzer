@@ -21,23 +21,25 @@ from langchain.chains.conversational_retrieval.prompts import CONDENSE_QUESTION_
 from langchain.document_loaders import PyPDFLoader
 import os
 import pinecone
+from typing import List, Tuple
 from dotenv import load_dotenv
 
 from prompt_template import CustomOutputParser, CustomPromptTemplate
 
 
 class Conversation:
-    def __init__(self):
+    def __init__(self, conv_list: List[Tuple]):
         # user_session = None
-        conv_id = self.conv_id
-        conv_created_datetime = self.conv_created_datetime
-        conv_last_updated_datetime = self.conv_last_updated_datetime
-        conv_type = self.conv_type
-        conv_meta = self.conv_meta
-        conv_mem = self.conv_mem
-        conv_docs = self.docs
-        conv_images = self.images
-        conv_dsources = self.conv_dsources
+        # self.conv_id
+        # self.conv_created_datetime
+        # self.conv_last_updated_datetime
+        # self.conv_type
+        # self.conv_meta
+        # self.conv_mem
+        # self.docs
+        # self.images
+        # self.conv_dsources
+        self.conv_token_list = conv_list
 
     def tools_bag(self, penal_code):
         search = DuckDuckGoSearchRun()
@@ -58,6 +60,7 @@ class Conversation:
             #     description="useful when you want to refer to entities and their related information from the previous conversation history",
             # ),
         ]
+        return tools
 
     def vector_store(self, docs, index_name, embeddings, locol_vectorstore):
         if locol_vectorstore:
@@ -86,7 +89,7 @@ class Conversation:
             while not pinecone.describe_index(index_name).status["ready"]:
                 time.sleep(1)
 
-        docsearch = Pinecone.from_documents(docs, embeddings, index_name=index_name)
+            docsearch = Pinecone.from_documents(docs, embeddings, index_name=index_name)
         # query = "How many sections are there in the Indian Penal Code?"
         # docs = docsearch.similarity_search(query)
 
@@ -96,7 +99,7 @@ class Conversation:
 
         return docsearch
 
-    def doc_handler():
+    def doc_handler(self):
         doc_path = str("./penal_code.pdf")
         loader = PyPDFLoader(doc_path)
         documents = loader.load_and_split()
@@ -111,7 +114,7 @@ class Conversation:
 
     def prompts_templates(self, tools):
         # Set up the base template
-        template = """You are a conversational assistant on Indian Law and Governemnt policy related topics. Answer the following questions as best you can, you have access to the following tools:
+        template = """You are a helpful conversational assistant on Indian Law and Governemnt policy related topics. Answer the following questions as best you can, you have access to the following tools:
 
         {tools}
 
